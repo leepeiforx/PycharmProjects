@@ -84,3 +84,5 @@ for a, b in zip(x, y):
 plt.show()
 
 #%%
+def get_know():
+    pass

@@ -171,7 +171,7 @@ bar3d = (Bar3D()
               xaxis3d_opts=opts.Axis3DOpts(x_axis, type_='category'),
               yaxis3d_opts=opts.Axis3DOpts(y_axis, type_='category'),
               zaxis3d_opts=opts.Axis3DOpts(type_='value'),
-              grid3d_opts=opts.Grid3DOpts(width='140', depth='84', is_rotate=True))
+              grid3d_opts=opts.Grid3DOpts(width=140, depth=84, is_rotate=True))
          .set_global_opts(title_opts=opts.TitleOpts('一周不同时间段的骑行需求'),
                           visualmap_opts=opts.VisualMapOpts(is_show=True, max_=600,
                                                             is_piecewise=False,

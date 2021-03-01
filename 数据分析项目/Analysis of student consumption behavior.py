@@ -3,8 +3,6 @@ from common.utils import fix_matplotlib_error
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
-from pyecharts import *
 
 # %%
 # 读取数据
@@ -59,11 +57,11 @@ data2_new = data2.drop(columns=['消费项目序列号', '消费操作编码'])
 data2['消费地点'].value_counts(dropna=False)
 # %%
 # 描述性统计
-data2[['消费金额', '存储金额', '余额', '消费次数']].describe().T
+print(data2[['消费金额', '存储金额', '余额', '消费次数']].describe().T)
 
 # 结果保存
 file_path = r'C:\Users\bolat\Desktop\file\DataAnalysis'
-data2_new.to_csv(file_path + '\data2_new.csv', index=False, encoding='gbk')
+data2_new.to_csv(file_path + r'\data2_new.csv', index=False, encoding='gbk')
 
 # %%
 # data3的数据处理
@@ -237,17 +235,17 @@ r = pd.concat([r2, r1], axis=1)
 r.columns = list(df_pivot.columns) + ['类别数目']
 print(r)
 
-#%%
+# %%
 # 分析每一类学生群体的消费特点
 # 可以根据 聚类类别 分表画图进行分析
 # 通过对低消费学生群体的行为进行分析，探讨是否存在某些特征，能为学校助学金评定提供参考
 data_500 = data.groupby('校园卡号').sum()[['消费金额']]
-data_500.sort_values(by='消费金额',ascending=True,inplace=True)
+data_500.sort_values(by='消费金额', ascending=True, inplace=True)
 data_500 = data_500.head(500)
 data_500_index = data_500.index.values
 data_500 = data[data['校园卡号'].isin(data_500_index)]
 
-#%%
+# %%
 # 取出最低消费500人的最频繁的消费地点，并添加一列
 # data_500.drop(columns=['Unnamed: 0'],inplace=True)
 # data_500 = data_500['消费地点'].value_counts()[:10]
