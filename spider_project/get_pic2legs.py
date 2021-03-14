@@ -5,8 +5,6 @@ import os
 import random
 
 
-# %%
-
 def get_pic_href(url):
     page_text = requests.get(url, headers=headers, proxies=proxy).text
     page_info = etree.HTML(page_text)
@@ -47,7 +45,7 @@ if __name__ == '__main__':
         'http': '127.0.0.1:57816',
         'https': '127.0.0.1:57816'
     }
-    url = r'http://www.uuleg.com/women/2021/02/01/17633.html'
+    url = r''
 
     save_path = r'H:\下载\imgs'
     pic_hrefs_list, file_path = get_pic_href(url)
