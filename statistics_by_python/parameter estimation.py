@@ -1,11 +1,11 @@
 # 参数估计
-'''
+"""
 享受贷款的学生毕业前欠款平均数额为12168美元，假定这一欠款数额的平均值是基于
 480名学生贷款人组成的样本计算得来的，
 毕业前欠款数额的总体标准差为2200美元。根据样本数据给出学生中享受贷款的在
 毕业前平均欠款数额的95%的置信区间。
 注意，大于30即为大样本。
-'''
+"""
 import numpy as np
 import pandas as pd
 from scipy import stats
@@ -23,6 +23,12 @@ se = pop_std / np.sqrt(sample_n)
 # 95%置信区间
 CI_debt = stats.norm.interval(confidence, loc=sample_mean, scale=se)
 
+# 等价于
+# 这里求出的limit,相当于统计学中的z
+# 双侧检验
+limit = stats.norm.ppf((1 - confidence) / 2)
+print(sample_mean + limit * se, sample_mean - limit * se)
+
 # %%
 # 总体均值的区间估计：小样本
 s_sample = np.random.randint(1, 400, 15)
@@ -35,15 +41,13 @@ se = s_sample.std() / np.sqrt(sample_n)
 # 样本均值
 sample_mean = s_sample.mean()
 
-# %%
 # 95%置信区间
 CI_debt = stats.t.interval(confidence, df=sample_n - 1, loc=sample_mean, scale=se)
-
 print('点估计值为', sample_mean)
 print('95%置信区间为', CI_debt)
 
 # %%
-# 实验4-3 总体比例的估计
+# 实验4-3 总体比例的估计(不放回,如果放回的话,对应的se略有不同),
 
 """
 要估计一批总数为5000件的产品的废品率，于是抽出400件产品进行检测，
@@ -126,10 +130,11 @@ confidence = 0.01
 test_mean = 500
 
 # 方法1,比较p值和置信度
-results = stats.ttest_1samp(sample, popmean=test_mean)
+results = stats.ttest_1samp(sample, popmean=test_mean)  # 计算一组分数的平均值的T检验。
 print('检验样本统计量t为', results[0])
 print('p值为', results[1])
 
+# %%
 # 方法二 计算t再计算临界值判断
 results = stats.ttest_1samp(sample, popmean=test_mean)
 limit = stats.t.ppf(confidence / 2, df=len(sample) - 1)
@@ -316,5 +321,45 @@ confidence = 0.05
 teset_var = 0.94
 
 # 计算临界值
-limit = stats.chi2.ppf(confidence, df=(len(car)) - 1)
 limit_lower, limit_higher = stats.chi2.interval(1 - confidence, df=(len(car) - 1))
+
+# 计算检验统计量
+chi2 = (len(car) - 1) * np.var(car) / teset_var
+print('接受域为:', limit_lower, limit_higher)
+print('检验统计量为:', chi2)
+
+"""
+结论
+检验统计量为 9.485816 在区间 3.8157482522361 和 21.9200492610212 中，
+因此无法拒绝原假设。在5%显著性水平下，两份杂志的订阅者拥有车的数量方差相同
+"""
+
+# %%
+# 实验4-14 两个总体的方差检验
+"""
+11月和12月两段时间，各抽10个样本，显著性水平=0.05，检验两段时间总体方差是否相等。
+H0:方差1 = 方差2
+H1:不相等
+"""
+data = {
+    '11月': [7493, 7525, 7760, 7499, 7555, 7690, 7668, 7600, 7516, 7711],
+    '12月': [8066, 8209, 7842, 7943, 7846, 8071, 8055, 8159, 7828, 8109]
+}
+df = pd.DataFrame(data)
+confidence = 0.05
+series1 = df['11月']
+series2 = df['12月']
+
+# 计算F分布临界值
+limit_lower, limit_higher = stats.f.interval(1 - confidence, dfn=len(series1) - 1, dfd=len(series2) - 1)
+
+# 计算分布临界值
+f = np.var(series1) / np.var(series2)
+print('接受域为', limit_lower, limit_higher)
+print('检验统计量为', f)
+
+"""
+结论
+因为检验统计量为 0.5023235585619927 在 接受域为 0.24838585469445493 和 4.025994158282978 区间内，
+所以不能拒绝原假设，在5%显著性水平下，可以认为11月和12月方差相等。
+"""
