@@ -10,7 +10,7 @@ import common.utils as ut
 
 # %%
 def get_size(city):
-    ak = 'jhFnHPYyR6ddq7lioDHay0kYRUsDgl8x'
+    ak = ut.ak
     url = 'http://api.map.baidu.com/place/v2/search?query=地铁&region={0}&output=json\
     &page_size=20&page_num=0&ak={1}'.format(city, ak)
     res = requests.get(url, headers={'User-Agent': get_ua()})
@@ -28,7 +28,7 @@ def get_data(city):
     :param city:
     :return:
     """
-    ak = 'jhFnHPYyR6ddq7lioDHay0kYRUsDgl8x'
+    ak = ut.ak
     sizes = get_size(city)
     df = pd.DataFrame()
     page_sizes = range(int(sizes['total'] / 20 + 1))
