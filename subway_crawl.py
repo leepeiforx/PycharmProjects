@@ -56,6 +56,6 @@ if __name__ == '__main__':
     df_all = pd.DataFrame
     for city in city_list:
         df = get_data(city)
-        df_all.apply(df)
+        df_all.append(df)
     df_all.to_csv('subway.csv')
 
